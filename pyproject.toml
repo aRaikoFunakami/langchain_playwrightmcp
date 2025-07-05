@@ -1,0 +1,16 @@
+[project]
+name = "langchain-playwrightmcp"
+version = "0.1.0"
+description = "LangChain and Playwright MCP integration for AI agent-driven web automation"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.13"
+dependencies = [
+    "langchain>=0.3.26",
+    "langchain-anthropic>=0.3.17",
+    "langchain-google-genai>=2.1.6",
+    "langchain-mcp-adapters>=0.1.8",
+    "langchain-openai>=0.3.27",
+    "langgraph>=0.5.1",
+    "openai>=1.93.0",
+]
