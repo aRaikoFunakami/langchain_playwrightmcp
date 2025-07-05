@@ -40,7 +40,7 @@ dependencies = [
 1. リポジトリをクローン
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/aRaikoFunakami/langchain_playwrightmcp.git
 cd langchain_playwrightmcp
 ```
 
@@ -100,26 +100,6 @@ async def run_agent():
 3. **ReActエージェント**: 推論と行動を組み合わせたAIエージェント
 4. **Google Gemini**: 自然言語理解と生成
 
-## 開発
-
-### 開発環境のセットアップ
-
-```bash
-# 開発依存関係のインストール
-uv add --dev pytest black flake8
-
-# コードフォーマット
-uv run black .
-
-# リント
-uv run flake8 .
-```
-
-### テスト
-
-```bash
-uv run pytest
-```
 
 ## トラブルシューティング
 

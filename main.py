@@ -1,9 +1,6 @@
-"""
-main.py - 基本的なMCPクライアント実装
-直接client.get_tools()を使用してツールを取得する方式
-"""
 import asyncio
 from langchain_mcp_adapters.client import MultiServerMCPClient
+from langchain_mcp_adapters.tools import load_mcp_tools
 from langgraph.prebuilt import create_react_agent
 
 # Playwright MCPサーバーの設定
@@ -22,22 +19,23 @@ client = MultiServerMCPClient(
 
 async def run_agent():
     """
-    エージェントを実行する関数
-    直接client.get_tools()でツールを取得し、Google Gemini 2.5 Flashモデルを使用
+    セッション管理を使用してエージェントを実行する関数
     """
-    # クライアントから直接ツールを取得
-    tools = await client.get_tools()
-    
-    # ReAct エージェントを作成（Google Geminiモデルを使用）
-    agent = create_react_agent("google_genai:gemini-2.5-flash", tools)
-
-    # YouTubeでサンドイッチマンの漫才動画を検索・再生するタスクを実行
-    response = await agent.ainvoke(
-        {"messages": [{"role": "user", "content": "youtubeでサンドイッチマンの漫才の動画を検索して動画を再生して"}]}
-    )
-    
-    # レスポンスメッセージの内容を出力
-    print("Agent response:", response["messages"][-1].content)
+    # セッションを使用してMCPクライアントとの接続を管理
+    async with client.session("playwright") as session:
+        # セッションからツールを読み込み
+        tools = await load_mcp_tools(session)
+        
+        # ReAct エージェントを作成（Google Geminiモデルを使用）
+        agent = create_react_agent("google_genai:gemini-2.5-flash", tools)
+        
+        # YouTubeでサンドイッチマンの漫才動画を検索・再生するタスクを実行
+        response = await agent.ainvoke(
+            {"messages": [{"role": "user", "content": "youtubeでサンドイッチマンの漫才の動画を検索して動画を再生して"}]}
+        )
+        
+        # レスポンスメッセージの内容を出力
+        print("Agent response:", response["messages"][-1].content)
 
 if __name__ == "__main__":
     # メイン実行部：非同期関数を実行
